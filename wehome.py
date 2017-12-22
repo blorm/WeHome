@@ -1,4 +1,5 @@
 import pymysql.cursors
+import cPickle
 
 def mysql():
     connection = pymysql.connect(host='localhost', port=3306,
@@ -15,12 +16,12 @@ def mysql():
     finally:
         connection.close()
 
-if __name__ == '__main__':
+def inspect():
     N = 15019
     title = ['id', 'source_id', 'source_name', 'state', 'city', 'area_id', 'neighborhood',
              #                    'zillow'      'WA'   'Seattle' '42660'       111
              'neighborhood_id', 'zipcode', 'addr', 'longitude', 'latitude', 'room_type',
-             #      114              39     14629    4004          4068      12
+             #      114             39     14629      4004         4068         12
               'beds', 'baths', 'size', 'status', 'price', 'zetimate', 'rent_zestimate',
              #  16      32       1917  1,2,3,4,5   1827      8929         886
              'pict_urls', 'updated_at', 'created_at', 'score', 'house_price', 'rent',
@@ -34,13 +35,14 @@ if __name__ == '__main__':
              'pm_long', 'pm_short', 'year_built', 'online_date']
              # 2310         478         127         294
     # status: for rent=1, for sale=2, off market=3, sold=4, pre-market=5
-    # price rental or for sale
+    # price: rental or for sale
 
-    # soucr_name = zillow
-    # state = WA
-    # city =  Seattle
-    for t in range(14, 20):
-        print title[t]
+    status = ['', 'for rent', 'for sale', 'off market', 'sold', 'pre-market']
+             #      2239        1720      9437 4408      1466
+    sum = 0
+    show_index = [16, 17, 19, 25]
+    for t in [12]:
+        # print title[t]
         list = []
 
         with open('seattle.csv', 'r') as f:
@@ -53,11 +55,49 @@ if __name__ == '__main__':
                         list.append(line[t])
 
                     # for j in range(len(line)):
-                    #     print '%20s: %s' %(title[j], line[j])
-                    # print '=============='
 
+                    # if line[16] == '1':     #  and line[25] != '\N'
+                    #     sum += 1
+                    #     for j in show_index:
+                    #         if j == 16:
+                    #             print '%20s: %s %s' % (title[j], line[j], status[int(line[j])])
+                    #         else:
+                    #             print '%20s: %s' %(title[j], line[j])
+                    #     print '=============='
+        print sum
         print list
         print len(list)
         print
 
+def clean():
+    keep_index = [0, 10, 11, 12, 13, 14,   15,   16,   17,   19,      25]
+                #id lng lat type bed bath size status price rent_z  rent
+    fin = open('seattle.csv', 'r')
+    fout = open('seattle_valid.csv', 'w')
+    if fin == '' or fout == '':
+        print 'file error'
+        exit()
 
+    while True:
+        data = fin.readline()
+        if data == '':
+            break
+        line = data.strip().split('\t')
+        # valid info
+        if line[16] == '1' or line[25] != '\N':
+            lineout = ''
+            # rent: throw decimal parts... 2315.234 -> 2315
+            if line[25] != '\N':
+                line[25] = str(int(float(line[25])))
+            for i in keep_index:
+                lineout += line[i] + '\t'
+            lineout = lineout[:-1] + '\n'
+            fout.write(lineout)
+
+    fin.close()
+    fout.close()
+
+
+if __name__ == '__main__':
+    # inspect()
+    clean()
