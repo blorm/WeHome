@@ -1,5 +1,5 @@
 import pymysql.cursors
-import cPickle
+import time
 
 def mysql():
     connection = pymysql.connect(host='localhost', port=3306,
@@ -113,15 +113,88 @@ def divide():
         if data == '':
             break
         line = data.strip().split('\t')
+
+        # 2000 train data
         if line[16] == '1' and sum_train < 2000:
             sum_train += 1
             ftrain.write('\t'.join(line) + '\n')
-        else:
+        # 7524 test data
+        # no... only 200+ data
+        elif line[16] == '1':
             ftest.write('\t'.join(line) + '\n')
 
     fin.close()
     ftrain.close()
     ftest.close()
+
+# y^ = sigma(wi * xi) + b
+def y_est(x, w, b):
+    d = 0
+    for i in range(3):
+        if x[i] != '\N':
+            d += x[i] * w[i]
+    return d + b
+
+# loss: variance = (y - y^)^2 / n
+def loss(y, x, w, b):
+    lenth = len(x)
+    sigma = 0
+    for i in range(lenth):
+        sigma += (y[i] - y_est(x[i], w, b)) ** 2
+    return sigma / lenth
+
+def read(filename):
+    data = []
+    x, y = [], []
+    with open(filename, 'r') as f:
+        line = f.readline()
+        while line != '':
+            line = line.strip().split('\t')
+            data.append(line)
+            # no size data
+            if line[15] == '0' or line[15] == '\N' \
+            or line[13] == '\N' or line[14] == '\N':
+            # no bed / bath data
+                line = f.readline()
+                continue
+            y.append(float(line[17]))   # ?
+            x.append([line[15], line[14], line[13]])
+            for i in range(3):
+                if x[-1][i] != '\N':
+                    x[-1][i] = float(x[-1][i])
+            line = f.readline()
+    return data, x, y
+
+
+def linear(data, x, y):
+    # bed  bath  size
+    # 13   14    15
+    len_train = len(x)
+    print len_train
+    # size bath bed
+    w = [1.2, 200, 70]  # 520
+    b = 400
+    alpha = [0.0000001, 0.0001, 0.0001, 0.1]
+    N = 100
+    for n in range(5):
+        # print data[n][13:15]
+        for j in range(3):
+            for i in range(len_train): #len_train
+                w[j] += alpha[j] * (y[i] - y_est(x[i], w, b)) * x[i][j]
+                # print 'x, y', x[i], y[i], y_est(x[i], w, b)
+                # print w, b
+            # time.sleep(1)
+            b += alpha[3] * (y[i] - y_est(x[i], w, b))
+    # print w, b
+    # print int(loss(y, x, w, b))
+    return w, b
+
+def test(data, x, y, w, b):
+    print '    y     y^'
+    for i in range(len(y)):
+        print '%7.1f %.2f' %(y[i], y_est(x[i], w, b))
+    print 'test data lenth:', len(data)
+    print 'the variance sigma:%.2f' % loss(y, x, w, b)
 
 
 
@@ -129,4 +202,9 @@ def divide():
 if __name__ == '__main__':
     # inspect()
     # clean()
-    divide()
+    # divide()
+    data, x, y = read('seattle_train.csv')
+    w, b = linear(data, x, y)
+    print w, b
+    data, x, y = read('seattle_test.csv')
+    test(data, x, y, w, b)
