@@ -4,16 +4,16 @@
 1.根据csv文件判断各类列表数据，挑选出与租金相关度最高的几个备用。
 2.首先先清理数据 挑选出status=1的for rent进行计算，如果有时间再考虑status=[2,3,4,5]数据的rent, zetimate_rent列。
 3.status=1一共有2239个数据，挑选前2000个进行建模，239个验证。
-4.由于能力有限，我先挑选出了size, beds, bath三个重要类型，通过线性回归进行建模，得出各自的系数和截距。
+4.由于能力有限，我先挑选出了size, beds, bath三个重要类型，通过*线性回归*进行建模，得出各自的系数和截距。
 5.将验证集代入模型计算模拟租金，与zetimate、rent列表分别进行方差分析，判断模型的误差。
 
 ----------
 ### 结果如下：
-test data lenth: 239					#测试集共239个数据
-the variance sigma  :   263627.37		#模型的方差
-the variance of rent:  1633624.44		#rent列与租金的方差
+test data lenth: 239					// 测试集共239个数据
+the variance sigma  :   263627.37		// 模型的方差
+the variance of rent:  1633624.44		// rent列与租金的方差
 
-mine V.S. zetimate:						#对比模型与zetimate预估租金的方差
+mine V.S. zetimate:						// 对比模型与zetimate预估租金的方差
 the variance of me      :  182238.44
 the variance of zetimate: 2406692.62
 
