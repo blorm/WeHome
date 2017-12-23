@@ -20,7 +20,7 @@
 <td>the variance of rent</td><td>1633624.44</td> <td>rent列与租金的方差  </td>
   </tr>
   <tr><td></td></tr>
-  <tr><td>mine V.S. zetimate</td><td>对比模型与zetimate预估租金的方差</td></tr>
+  <tr><td>mine V.S. zetimate</td><td></td><td>对比模型与zetimate预估租金的方差</td></tr>
   <tr>
   <td>the variance of me </td><td>182238.44  </td>
   </tr>
