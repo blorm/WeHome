@@ -9,14 +9,19 @@
 
 ----------
 ### 原始数据在test.txt，方差的结果如下：
-test data lenth: 239					// 测试集共239个数据  
-the variance sigma  :   263627.37		// 模型的方差  
-the variance of rent:  1633624.44		// rent列与租金的方差  
-  
-mine V.S. zetimate:						// 对比模型与zetimate预估租金的方差  
-the variance of me      :  182238.44  
-the variance of zetimate: 2406692.62  
-
+<table>
+ <tr>
+<td>test data lenth</td> <td>239</td> <td>测试集共239个数据</td>
+<td>the variance sigma</td><td>263627.37</td>		<td>模型的方差</td>  
+<td>the variance of rent</td><td>1633624.44</td>		<td>rent列与租金的方差  </td>
+  </tr>
+  <tr></tr>
+  <tr>
+<td>mine V.S. zetimate</td>						<td>对比模型与zetimate预估租金的方差 </td> 
+<td>the variance of me </td><td>182238.44  </td>
+<td>the variance of zetimate </td><td>2406692.62  </td>
+  </tr>
+</table>
 ----------
 
 ### 讨论
