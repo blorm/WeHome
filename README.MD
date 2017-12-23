@@ -24,6 +24,8 @@
   <tr>对比模型与zetimate预估租金的方差</tr>
   <tr>
   <td>the variance of me </td><td>182238.44  </td>
+  </tr>
+  <tr>
 <td>the variance of zetimate </td><td>2406692.62  </td>
   </tr>
 </table>
