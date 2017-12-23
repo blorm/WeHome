@@ -22,10 +22,10 @@
   <tr><td></td></tr>
   <tr><td>mine V.S. zetimate</td><td></td><td>对比模型与zetimate预估租金的方差</td></tr>
   <tr>
-  <td>the variance of me </td><td>182238.44  </td>
+  <td>the variance of me </td><td>182238.44  </td><td></td>
   </tr>
   <tr>
-<td>the variance of zetimate </td><td>2406692.62  </td>
+<td>the variance of zetimate </td><td>2406692.62 </td><td> </td>
   </tr>
 </table>
 ----------
