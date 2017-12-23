@@ -38,9 +38,10 @@ def inspect():
     # price: rental or for sale
 
     status = ['', 'for rent', 'for sale', 'off market', 'sold', 'pre-market']
-             #      2239        1720      9437 4408      1466
+             #      2239        1720      9437 4408      1466       157
+             # 2000 + 239       1347        4408         1377       152
     sum = 0
-    show_index = [16, 17, 19, 25]
+    show_index = [16, 17, 10, 11, 19, 25]
     for t in [12]:
         # print title[t]
         list = []
@@ -51,19 +52,19 @@ def inspect():
                 if data != '':
                     line = data.strip().split('\t')
 
-                    if line[t] not in list:
-                        list.append(line[t])
+                    # if line[t] not in list:
+                    #     list.append(line[t])
 
                     # for j in range(len(line)):
 
-                    # if line[16] == '1':     #  and line[25] != '\N'
-                    #     sum += 1
-                    #     for j in show_index:
-                    #         if j == 16:
-                    #             print '%20s: %s %s' % (title[j], line[j], status[int(line[j])])
-                    #         else:
-                    #             print '%20s: %s' %(title[j], line[j])
-                    #     print '=============='
+                    if line[16] == '5':     #  and line[25] != '\N'
+                        sum += 1
+                        for j in show_index:
+                            if j == 16:
+                                print '%20s: %s %s' % (title[j], line[j], status[int(line[j])])
+                            else:
+                                print '%20s: %s' %(title[j], line[j])
+                        print '=============='
         print sum
         print list
         print len(list)
@@ -85,19 +86,47 @@ def clean():
         line = data.strip().split('\t')
         # valid info
         if line[16] == '1' or line[25] != '\N':
-            lineout = ''
+            # lineout = ''
             # rent: throw decimal parts... 2315.234 -> 2315
-            if line[25] != '\N':
-                line[25] = str(int(float(line[25])))
-            for i in keep_index:
-                lineout += line[i] + '\t'
-            lineout = lineout[:-1] + '\n'
-            fout.write(lineout)
+            # if line[25] != '\N':
+            #     line[25] = str(int(float(line[25])))
+            # for i in keep_index:
+            #     lineout += line[i] + '\t'
+            # lineout = lineout[:-1] + '\n'
+            # fout.write(lineout)
+            fout.write('\t'.join(line, '\t') + '\n')
 
     fin.close()
     fout.close()
 
+def divide():
+    fin = open('seattle_valid.csv', 'r')
+    ftrain = open('seattle_train.csv', 'w')
+    ftest = open('seattle_test.csv', 'w')
+    sum_train = 0
+    if not(fin and ftrain and ftest):
+        print 'file error'
+        exit()
+
+    while True:
+        data = fin.readline()
+        if data == '':
+            break
+        line = data.strip().split('\t')
+        if line[16] == '1' and sum_train < 2000:
+            sum_train += 1
+            ftrain.write('\t'.join(line) + '\n')
+        else:
+            ftest.write('\t'.join(line) + '\n')
+
+    fin.close()
+    ftrain.close()
+    ftest.close()
+
+
+
 
 if __name__ == '__main__':
     # inspect()
-    clean()
+    # clean()
+    divide()
