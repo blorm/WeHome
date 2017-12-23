@@ -190,12 +190,28 @@ def linear(data, x, y):
     return w, b
 
 def test(data, x, y, w, b):
-    print '    y     y^'
+    print '       zetimate      y     y^    rent'
+    sum_zeti = 0
+    sigma_zeti = 0
+    sigma_rent = 0
+    sigma_mine = 0
     for i in range(len(y)):
-        print '%7.1f %.2f' %(y[i], y_est(x[i], w, b))
-    print 'test data lenth:', len(data)
-    print 'the variance sigma:%.2f' % loss(y, x, w, b)
+        print '%16s %7.1f %.2f %s' %(data[i][19], y[i], y_est(x[i], w, b), data[i][25])
+        sigma_rent += (float(data[i][25]) - y[i]) ** 2
+        if data[i][19] != '\N':
+            sum_zeti += 1
+            sigma_zeti += (float(data[i][19]) - y[i]) ** 2
+            sigma_mine += (y_est(x[i], w, b)  - y[i]) ** 2
 
+    print
+    print 'test data lenth:', len(data)
+    print 'the variance sigma  :%12.2f' % loss(y, x, w, b)
+    print 'the variance of rent:%12.2f' % (sigma_rent / len(data))
+
+    print
+    print 'mine V.S. zetimate:'
+    print 'the variance of me      : %10.2f' % (sigma_mine / sum_zeti)
+    print 'the variance of zetimate: %10.2f' % (sigma_zeti / sum_zeti)
 
 
 
